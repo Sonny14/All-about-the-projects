@@ -1,4 +1,4 @@
-package project;
+package LoginPortal;
 
 import javax.swing.*;
 import java.awt.*;
