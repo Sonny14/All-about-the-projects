@@ -10,32 +10,27 @@ import java.awt.Color;
 import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.FileReader;
-import java.io.FileWriter;
-import java.io.IOException;
-import java.io.RandomAccessFile;
 import javax.swing.*;
 
 /**
  *
  * @author hp
  */
-public class SignUp extends JFrame implements ActionListener{
-    
+public class SignUp extends JFrame implements ActionListener {
+
     //Declaration of variables
-    JLabel label00, label01, label02, label03, label04, label05, label06;
-    JTextField textField01, textField02, textField03, textField04; 
-    JButton btn1, btn2;
+    JLabel titleLabel, firstNameLabel, lastNameLabel, idLabel, emailLabel, passLabel, confirmLabel;
+    JTextField firstNameField, lastNameField, idField, emailField;
+    JButton submitBtn, clearBtn;
     JPanel panel01;
     JPasswordField passwordField, confirmField;
-    File file = new File("C:\\Files");
-    int lines;
-    String test;
+    
+    //Linked list object
+    static UserLinkedList list = new UserLinkedList();
+    
     //Constructor
-    SignUp(){
-        
+    SignUp() {
+
         //Frame properties
         this.setVisible(true);
         this.setSize(1020, 780);
@@ -44,202 +39,140 @@ public class SignUp extends JFrame implements ActionListener{
         this.setResizable(false);
         this.setTitle("Sign-up Cinetix");
         this.setLayout(null);
-        
+
         //Panels
         panel01 = new JPanel();
         panel01.setSize(510, 780);
         panel01.setLayout(null);
         panel01.setBackground(Color.blue);
         add(panel01);
-        
+
         //Labels
-        label00 = new JLabel("Add Employee");
-        label00.setFont(new Font("Sans Serif", Font.BOLD, 24));
-        label01 = new JLabel("First Name");
-        label01.setFont(new Font("Sans Serif", Font.PLAIN, 14));
-        label02 = new JLabel("Last Name");
-        label02.setFont(new Font("Sans Serif", Font.PLAIN, 14));
-        label03 = new JLabel("Employee ID");
-        label03.setFont(new Font("Sans Serif", Font.PLAIN, 14));
-        label04 = new JLabel("Email");
-        label04.setFont(new Font("Sans Serif", Font.PLAIN, 14));
-//        label05 = new JLabel("Employee ID");
-//        label05.setFont(new Font("Sans Serif", Font.PLAIN, 14));
-        label05 = new JLabel("Password");
-        label05.setFont(new Font("Sans Serif", Font.PLAIN, 14));
-        label06 = new JLabel("Confirm password");
-        label06.setFont(new Font("Sans Serif", Font.PLAIN, 14));
-        add(label00);
-        add(label01);
-        add(label02);
-        add(label03);
-        add(label04);
-        //add(label05);
-        add(label05);
-        add(label06);
-        label00.setBounds(680, 90, 200, 30);
-        label01.setBounds(580, 150, 100, 20);
-        label02.setBounds(790, 150, 100, 20);
-        label03.setBounds(580, 230, 100, 20);
-        label04.setBounds(580, 310, 100, 20);
-        label05.setBounds(580, 390, 150, 20);
-        label06.setBounds(580, 470, 150, 20);
-        
-        
+        titleLabel = new JLabel("Add Employee");
+        titleLabel.setFont(new Font("Sans Serif", Font.BOLD, 24));
+        firstNameLabel = new JLabel("First Name");
+        firstNameLabel.setFont(new Font("Sans Serif", Font.PLAIN, 14));
+        lastNameLabel = new JLabel("Last Name");
+        lastNameLabel.setFont(new Font("Sans Serif", Font.PLAIN, 14));
+        idLabel = new JLabel("Employee ID");
+        idLabel.setFont(new Font("Sans Serif", Font.PLAIN, 14));
+        emailLabel = new JLabel("Email");
+        emailLabel.setFont(new Font("Sans Serif", Font.PLAIN, 14));
+        passLabel = new JLabel("Password");
+        passLabel.setFont(new Font("Sans Serif", Font.PLAIN, 14));
+        confirmLabel = new JLabel("Confirm password");
+        confirmLabel.setFont(new Font("Sans Serif", Font.PLAIN, 14));
+        add(titleLabel);
+        add(firstNameLabel);
+        add(lastNameLabel);
+        add(idLabel);
+        add(emailLabel);
+        //add(passLabel);
+        add(passLabel);
+        add(confirmLabel);
+        titleLabel.setBounds(680, 90, 200, 30);
+        firstNameLabel.setBounds(580, 150, 100, 20);
+        lastNameLabel.setBounds(790, 150, 100, 20);
+        idLabel.setBounds(580, 230, 100, 20);
+        emailLabel.setBounds(580, 310, 100, 20);
+        passLabel.setBounds(580, 390, 150, 20);
+        confirmLabel.setBounds(580, 470, 150, 20);
+
         //Text Fields
-        textField01 = new JTextField();
-        textField02 = new JTextField();
-        textField03 = new JTextField();
-        textField04 = new JTextField();
-        //textField05 = new JTextField();
+        firstNameField = new JTextField();
+        lastNameField = new JTextField();
+        idField = new JTextField();
+        emailField = new JTextField();
         passwordField = new JPasswordField();
         confirmField = new JPasswordField();
-        
-        add(textField01);
-        add(textField02);
-        add(textField03);
-        add(textField04);
-        //add(textField05);
+
+        add(firstNameField);
+        add(lastNameField);
+        add(idField);
+        add(emailField);
         add(passwordField);
         add(confirmField);
-        textField01.setBounds(580, 170, 150, 35);
-        textField02.setBounds(790, 170, 150, 35);
-        textField03.setBounds(580, 250, 250, 35);
-        textField04.setBounds(580, 330, 250, 35);
-        //textField05.setBounds(580, 410, 250, 35);
+        firstNameField.setBounds(580, 170, 150, 35);
+        lastNameField.setBounds(790, 170, 150, 35);
+        idField.setBounds(580, 250, 250, 35);
+        emailField.setBounds(580, 330, 250, 35);
         passwordField.setBounds(580, 410, 250, 35);
         confirmField.setBounds(580, 490, 250, 35);
-        
-        
-        
+
         //Buttons
-        btn1 = new JButton("Submit");
-        btn2 = new JButton("Clear");
-        btn1.addActionListener(this);
-        btn2.addActionListener(this);
-        add(btn1);
-        add(btn2);
-        btn1.setBounds(785, 570, 130, 35);
-        btn2.setBounds(610, 570, 130, 35);
+        submitBtn = new JButton("Submit");
+        clearBtn = new JButton("Clear");
+        submitBtn.addActionListener(this);
+        clearBtn.addActionListener(this);
+        add(submitBtn);
+        add(clearBtn);
+        submitBtn.setBounds(785, 570, 130, 35);
+        clearBtn.setBounds(610, 570, 130, 35);
     }
-    
-    //Create a folder
-    void createFolder(){
-        if(!file.exists()){
-            file.mkdirs();
-        }
-    }
-    
-    //Read text file
-    void readFile() throws IOException{
-        try{
-            FileReader fileReader  = new FileReader(file+"\\logins.txt");
-            System.out.println("File do exist");
-        }catch(FileNotFoundException ex){
-            try{
-                FileWriter fileWriter = new FileWriter(file+"\\logins.txt");
-                System.out.println("File was created");
-            }catch(IOException ex1){ 
-            }
-        }
-    }
-    
-    void addData(String firstName, String lastName, String user, String pass, String email){
-        try{
-            RandomAccessFile randAccFile = new RandomAccessFile(file+"\\logins.txt", "rw");
-            
-            //Loop until the last line
-            for(int i = 0; i < lines; i++){
-                randAccFile.readLine();
-            }
-            
-            if(lines > 0){
-                randAccFile.writeBytes("\r\n");
-                randAccFile.writeBytes("\r\n");
-            }
-            randAccFile.writeBytes("Username:"+user+"\r\n");
-            randAccFile.writeBytes("Password:"+pass+"\r\n");
-            randAccFile.writeBytes("First Name:"+firstName+"\r\n");
-            randAccFile.writeBytes("Last Name:"+lastName+"\r\n");
-            randAccFile.writeBytes("Email:"+email+"\r\n");
-            
-        }
-        catch(FileNotFoundException ex){}
-        catch(IOException ex){}
-    }
-    
-    void countLines(){
-        try{
-            lines = 0;
-            RandomAccessFile randomAccFile = new RandomAccessFile(file+"\\logins.txt", "rw");
-            for(int i = 0; randomAccFile.readLine() != null; i++){
-                lines++;
-            }
-            System.out.println("Number of lines: "+lines);
-        } 
-        catch(FileNotFoundException ex){}
-        catch(IOException ex){}
-    }
-    
-    public void actionPerformed(ActionEvent e){
-        if(e.getSource() == btn1){
-            int x = 0;
-            String s1 = textField01.getText();
-            String s2 = textField02.getText();
-            char[] s3 = passwordField.getPassword();
-            char[] s4 = confirmField.getPassword();
-            String s5 = textField03.getText();
-            String s6 = textField04.getText();
-            String s7 = new String(s3);
-            String s8 = new String(s4);
-            
-            if(s7.isEmpty() || s8.isEmpty()){
-                System.out.println("Password is null");
-                JOptionPane.showMessageDialog(this, "Password is empty!", "Warning!", JOptionPane.ERROR_MESSAGE);
-            }
-            else if(s1.isEmpty() && s2.isEmpty()){
-                System.out.println("User name is null");
-                JOptionPane.showMessageDialog(this, "Firstname and Lastname is empty", "Warning!", JOptionPane.ERROR_MESSAGE);
-            }
-            else if(s5.isEmpty()){
-                System.out.println("Employee id is null");
-                JOptionPane.showMessageDialog(this, "Employee Id is empty", "Warning!", JOptionPane.ERROR_MESSAGE);
-            }
-            else if(s6.isEmpty()){
-                System.out.println("Email is null");
-                JOptionPane.showMessageDialog(this, "Email is empty", "Warning!", JOptionPane.ERROR_MESSAGE);
-            }
-            else if(s7.equals(s8)){
-                try{
-                    createFolder();
-                    readFile();
-                    countLines();
-                    addData(s1, s2, s5, s7, s6);
-                    
-                    JOptionPane.showMessageDialog(null, "Employee is added successfully");
-                    new Login();
-                    this.dispose();
-                }catch(Exception ex){
-                    System.out.println(ex);
+
+    public void actionPerformed(ActionEvent e) {
+        if (e.getSource() == submitBtn) {
+            try {
+                String s1 = idField.getText();
+                char[] s2 = passwordField.getPassword();
+                char[] s3 = confirmField.getPassword();
+
+                int employeeId = Integer.parseInt(s1);
+                String firstName = firstNameField.getText();
+                String lastName = lastNameField.getText();
+                String email = emailField.getText();
+                String pass = new String(s2);
+                String confPass = new String(s3);
+
+                if (pass.isEmpty()) {
+                    System.out.println("Password is null");
+                    JOptionPane.showMessageDialog(this, "Password is empty!", "Warning!", JOptionPane.ERROR_MESSAGE);
+                } else if (confPass.isEmpty()) {
+                    System.out.println("Confirm password is null");
+                    JOptionPane.showMessageDialog(this, "Please confirm your password", "Warning!", JOptionPane.ERROR_MESSAGE);
+                } else if (firstName.isEmpty()) {
+                    System.out.println("First name is null");
+                    JOptionPane.showMessageDialog(this, "Firstname and Lastname is empty", "Warning!", JOptionPane.ERROR_MESSAGE);
+                } else if (lastName.isEmpty()) {
+                    System.out.println("Last name is null");
+                    JOptionPane.showMessageDialog(this, "Firstname and Lastname is empty", "Warning!", JOptionPane.ERROR_MESSAGE);
+                } else if (s1.isEmpty()) {
+                    System.out.println("Employee id is null");
+                    JOptionPane.showMessageDialog(this, "Employee Id is empty", "Warning!", JOptionPane.ERROR_MESSAGE);
+                } else if (email.isEmpty()) {
+                    System.out.println("Email is null");
+                    JOptionPane.showMessageDialog(this, "Email is empty", "Warning!", JOptionPane.ERROR_MESSAGE);
+                } else if (confPass.equals(pass)) {
+                    try {
+                        
+                        //Sign-up logic here
+                        list.addUser(employeeId, firstName, lastName, email, pass);
+                        list.displayUsers();
+                        this.dispose();
+                        new Login();
+                    } catch (Exception ex) {
+                        System.out.println(ex);
+                    }
+                } else {
+                    JOptionPane.showMessageDialog(null, "Password do not match");
                 }
-            }else{
-                JOptionPane.showMessageDialog(null, "Password do not match");
+            } catch (NumberFormatException ex) {
+                System.out.println("Entered an invalid character in employee id, must be an integer!");
+                JOptionPane.showMessageDialog(this, "Employee ID is invalid", "Warning!", JOptionPane.ERROR_MESSAGE);
             }
-        }else{
-            textField01.setText("");
-            textField02.setText("");
-            textField03.setText("");
-            textField04.setText("");
+        } else {
+            firstNameField.setText("");
+            lastNameField.setText("");
+            idField.setText("");
+            emailField.setText("");
             passwordField.setText("");
             confirmField.setText("");
         }
     }
-    
-    
-        
+
     public static void main(String[] args) {
         SignUp signUp = new SignUp();
         signUp.setVisible(true);
     }
-    
+
 }

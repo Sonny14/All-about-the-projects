@@ -1,68 +1,58 @@
 package LoginPortal;
 
+import static LoginPortal.SignUp.list;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.FileReader;
-import java.io.FileWriter;
-import java.io.IOException;
-import java.io.RandomAccessFile;
 
 public class Login extends JFrame implements ActionListener {
 
-    JLabel label00, label01, label02;
-    JTextField textField01; // ID field
+    JLabel titleLabel, idLabel, passLabel;
+    JTextField idField; // ID field
     JPasswordField passField; // Password field
     JButton loginBtn, clearBtn; // Login and clear buttons
-    JPanel panel01; // Panel
-    File file = new File("C:\\Files"); // File path
-    int lines;
+    JPanel panel; // Panel
 
     // Constructor
     Login() {
-
         // Panels
-        panel01 = new JPanel();
-        panel01.setSize(510, 780);
-        panel01.setLayout(null);
-        panel01.setBackground(Color.blue);
-        //add(panel01);
+        panel = new JPanel();
+        panel.setSize(510, 780);
+        panel.setLayout(null);
 
         // Labels
-        label00 = new JLabel("Login to Cinetix");
-        label00.setFont(new Font("Sans Serif", Font.BOLD, 24));
-        label01 = new JLabel("Enter Email:");
-        label01.setFont(new Font("Sans Serif", Font.PLAIN, 14));
-        label02 = new JLabel("Enter Password:");
-        label02.setFont(new Font("Sans Serif", Font.PLAIN, 14));
-        add(label00);
-        add(label01);
-        add(label02);
-        label00.setBounds(160, 50, 200, 30);
-        label01.setBounds(50, 150, 100, 20);
-        label02.setBounds(50, 230, 100, 20);
+        titleLabel = new JLabel("Login to Cinetix");
+        titleLabel.setFont(new Font("Sans Serif", Font.BOLD, 24));
+        idLabel = new JLabel("Employee ID:");
+        idLabel.setFont(new Font("Sans Serif", Font.PLAIN, 14));
+        passLabel = new JLabel("Password:");
+        passLabel.setFont(new Font("Sans Serif", Font.PLAIN, 14));
+        add(titleLabel);
+        add(idLabel);
+        add(passLabel);
+        titleLabel.setBounds(160, 50, 200, 30);
+        idLabel.setBounds(50, 150, 100, 20);
+        passLabel.setBounds(50, 230, 100, 20);
 
         // Text Fields
-        textField01 = new JTextField();
+        idField = new JTextField();
         passField = new JPasswordField();
-        add(textField01);
+        add(idField);
         add(passField);
-        textField01.setBounds(160, 150, 250, 35);
+        idField.setBounds(160, 150, 250, 35);
         passField.setBounds(160, 230, 250, 35);
 
         // Buttons
         loginBtn = new JButton("Login");
-        clearBtn = new JButton("Clear");
+        clearBtn = new JButton("Signup");
         loginBtn.addActionListener(this);
         clearBtn.addActionListener(this);
         add(loginBtn);
         add(clearBtn);
         loginBtn.setBounds(275, 310, 130, 35);
         clearBtn.setBounds(130, 310, 130, 35);
-        add(panel01);
-        
+        add(panel);
+
         //Frame Properties
         this.setTitle("Login");
         this.setSize(520, 520);
@@ -71,125 +61,43 @@ public class Login extends JFrame implements ActionListener {
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         this.setLocationRelativeTo(null);
         this.setVisible(true);
-    
-    }
-
-    // Create a folder
-    void createFolder() {
-        if (!file.exists()) {
-            file.mkdirs();
-        }
-    }
-
-    // Read text file
-    void readFile() {
-        try {
-            FileReader fileReader = new FileReader(file + "\\logins.txt");
-            System.out.println("File exists!");
-        } catch (FileNotFoundException ex) {
-            try {
-                FileWriter fileWriter = new FileWriter(file + "\\logins.txt");
-                System.out.println("File was created");
-            } catch (IOException ex1) {
-                ex1.printStackTrace();
-            }
-        }
-    }
-
-    // Login logic
-    void logic(String user, String pass) throws IOException{
-        try{
-            RandomAccessFile raf = new RandomAccessFile(file+"\\logins.txt", "rw");
-            for(int i = 0; i < lines; i+=5){
-                System.out.println("Count: "+i);
-                String lineUser = raf.readLine();
-                String linePass = raf.readLine();
-                
-                if(lineUser != null && linePass != null){
-                    String forUser = lineUser.substring(9);
-                    String forPass = linePass.substring(9);
-                   
-//                   String forUser = lineUser;
-//                   String forPass = linePass;
-                    System.out.println("User: "+forUser+"Pass: "+forPass);
-                    
-                    if(user.equals(forUser) && pass.equals(forPass)){
-                        JOptionPane.showMessageDialog(null, "Login Successfully!!"); 
-                        break;
-                    }else if(i == (lines - 5)){
-                        //Adjusting index to lines count
-                        JOptionPane.showMessageDialog(null, "Incorrect username/password"); 
-                        break;
-                    }else{
-                        System.out.println("Skipped invalid line with insufficient length or null:"+lineUser+", "+linePass);
-                    }
-                    //Skip next lines
-                    for (int k = 1; k <= 5; k++) { if (raf.readLine() == null) { break;
-                }
-            }
-        }
-    }
-        }catch (FileNotFoundException ex) { ex.printStackTrace();
-    }
-    }
-
-
-    // Count the number of lines in the file
-    void countLines() {
-        try {
-            lines = 0;
-            RandomAccessFile raf = new RandomAccessFile(file + "\\logins.txt", "rw");
-            while (raf.readLine() != null) {
-                lines++;
-            }
-            System.out.println("Number of lines: " + lines);
-        } catch (FileNotFoundException ex) {
-            ex.printStackTrace();
-        } catch (IOException ex) {
-            ex.printStackTrace();
-        }
     }
 
     // Action performed
+    @Override
     public void actionPerformed(ActionEvent e) {
-        if (e.getSource() == loginBtn) {
-            String str1 = textField01.getText();
-            char[] p = passField.getPassword();
-            String str2 = new String(p);
+        try {
+            if (e.getSource() == loginBtn) {
+                String s1 = idField.getText();
+                char[] p = passField.getPassword();
+                int employeeId = Integer.parseInt(s1);
+                String pass = new String(p);
 
-            try {
-                createFolder();
-                readFile();
-                countLines();
-                logic(str1, str2);
-            } catch (Exception ex) {
-                System.out.println(ex);
-            }
-        } else {
-            textField01.setText("");
-            passField.setText("");
-        }
-    }
+                try {
+                    //Login logic here
+                    if (list.validateUser(employeeId, pass)) {
+                        JOptionPane.showMessageDialog(null, "Successfully logged in", "Message", JOptionPane.PLAIN_MESSAGE);
+                    }
+
+                } catch (Exception ex) {
+                    System.out.println(ex);
+                }
+            } else {
+                  
+                  //DUMMY JUST TO TEST RELOGIN FUNCTION
+                  new SignUp();
+                  
+//                idField.setText("");
+//                passField.setText("");
+                  
     
-    void listDirectoryContents() {
-    File dir = new File("C:\\Files");
-    if (dir.exists() && dir.isDirectory()) {
-        String[] files = dir.list();
-        if (files != null) {
-            for (String fileName : files) {
-                System.out.println("Found file: " + fileName);
             }
-        } else {
-            System.out.println("Directory is empty.");
+        } catch (Exception ex) {
+            System.out.println(ex);
         }
-    } else {
-        System.out.println("Directory does not exist.");
     }
-}
-
 
     public static void main(String arr[]) {
-        Login login = new Login();
-        login.listDirectoryContents();
+        new Login();
     }
 }
