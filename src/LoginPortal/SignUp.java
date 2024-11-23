@@ -9,14 +9,13 @@ package LoginPortal;
 import java.awt.Color;
 import java.awt.Font;
 import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import javax.swing.*;
 
 /**
  *
  * @author hp
  */
-public class SignUp extends JFrame implements ActionListener {
+public class SignUp extends JFrame {
 
     //Declaration of variables
     JLabel titleLabel, firstNameLabel, lastNameLabel, idLabel, emailLabel, passLabel, confirmLabel;
@@ -24,10 +23,10 @@ public class SignUp extends JFrame implements ActionListener {
     JButton submitBtn, clearBtn;
     JPanel panel01;
     JPasswordField passwordField, confirmField;
-    
+
     //Linked list object
     static UserLinkedList list = new UserLinkedList();
-    
+
     //Constructor
     SignUp() {
 
@@ -67,7 +66,6 @@ public class SignUp extends JFrame implements ActionListener {
         add(lastNameLabel);
         add(idLabel);
         add(emailLabel);
-        //add(passLabel);
         add(passLabel);
         add(confirmLabel);
         titleLabel.setBounds(680, 90, 200, 30);
@@ -102,72 +100,62 @@ public class SignUp extends JFrame implements ActionListener {
         //Buttons
         submitBtn = new JButton("Submit");
         clearBtn = new JButton("Clear");
-        submitBtn.addActionListener(this);
-        clearBtn.addActionListener(this);
         add(submitBtn);
         add(clearBtn);
         submitBtn.setBounds(785, 570, 130, 35);
         clearBtn.setBounds(610, 570, 130, 35);
-    }
-
-    public void actionPerformed(ActionEvent e) {
-        if (e.getSource() == submitBtn) {
-            try {
-                String s1 = idField.getText();
-                char[] s2 = passwordField.getPassword();
-                char[] s3 = confirmField.getPassword();
-
-                int employeeId = Integer.parseInt(s1);
-                String firstName = firstNameField.getText();
-                String lastName = lastNameField.getText();
-                String email = emailField.getText();
-                String pass = new String(s2);
-                String confPass = new String(s3);
-
-                if (pass.isEmpty()) {
-                    System.out.println("Password is null");
-                    JOptionPane.showMessageDialog(this, "Password is empty!", "Warning!", JOptionPane.ERROR_MESSAGE);
-                } else if (confPass.isEmpty()) {
-                    System.out.println("Confirm password is null");
-                    JOptionPane.showMessageDialog(this, "Please confirm your password", "Warning!", JOptionPane.ERROR_MESSAGE);
-                } else if (firstName.isEmpty()) {
-                    System.out.println("First name is null");
-                    JOptionPane.showMessageDialog(this, "Firstname and Lastname is empty", "Warning!", JOptionPane.ERROR_MESSAGE);
-                } else if (lastName.isEmpty()) {
-                    System.out.println("Last name is null");
-                    JOptionPane.showMessageDialog(this, "Firstname and Lastname is empty", "Warning!", JOptionPane.ERROR_MESSAGE);
-                } else if (s1.isEmpty()) {
-                    System.out.println("Employee id is null");
-                    JOptionPane.showMessageDialog(this, "Employee Id is empty", "Warning!", JOptionPane.ERROR_MESSAGE);
-                } else if (email.isEmpty()) {
-                    System.out.println("Email is null");
-                    JOptionPane.showMessageDialog(this, "Email is empty", "Warning!", JOptionPane.ERROR_MESSAGE);
-                } else if (confPass.equals(pass)) {
-                    try {
-                        
-                        //Sign-up logic here
-                        list.addUser(employeeId, firstName, lastName, email, pass);
-                        list.displayUsers();
-                        this.dispose();
-                        new Login();
-                    } catch (Exception ex) {
-                        System.out.println(ex);
-                    }
-                } else {
-                    JOptionPane.showMessageDialog(null, "Password do not match");
-                }
-            } catch (NumberFormatException ex) {
-                System.out.println("Entered an invalid character in employee id, must be an integer!");
-                JOptionPane.showMessageDialog(this, "Employee ID is invalid", "Warning!", JOptionPane.ERROR_MESSAGE);
-            }
-        } else {
+        
+        //Clear button
+        clearBtn.addActionListener((ActionEvent e) -> {
             firstNameField.setText("");
             lastNameField.setText("");
             idField.setText("");
             emailField.setText("");
             passwordField.setText("");
             confirmField.setText("");
-        }
+        });
+
+        //Submit button
+        submitBtn.addActionListener((ActionEvent e) -> {
+            try {
+                String s1 = idField.getText();
+                char[] s2 = passwordField.getPassword();
+                char[] s3 = confirmField.getPassword();
+                
+                if(s1.isBlank()){
+                    JOptionPane.showMessageDialog(null, "Blank id");
+                    return;
+                }
+                int employeeId = Integer.parseInt(s1);
+                String firstName = firstNameField.getText();
+                String lastName = lastNameField.getText();
+                String email = emailField.getText();
+                String pass = new String(s2);
+                String confPass = new String(s3);
+                
+                if (firstName.isBlank() || lastName.isBlank() || email.isBlank() || pass.isBlank() || confPass.isBlank() || s1.isBlank()) {
+                    System.out.println("Field/s are empty");
+                    JOptionPane.showMessageDialog(SignUp.this, "All fields are required", "Warning!", JOptionPane.ERROR_MESSAGE);
+                } 
+                else if (confPass.equals(pass)) {
+                    try {
+                        
+                        //Sign-up logic here
+                        list.addUser(employeeId, firstName, lastName, email, pass);
+                        list.displayUsers();
+                        SignUp.this.dispose();
+                        
+                    } catch (Exception ex) {
+                        System.out.println(ex);
+                    }
+                } else {
+                    JOptionPane.showMessageDialog(SignUp.this, "Passwords do not match", "Error", JOptionPane.ERROR_MESSAGE);
+                }
+            } catch (NumberFormatException ex) {
+                System.out.println(ex);
+                JOptionPane.showMessageDialog(SignUp.this, "Please try again", "Error!", JOptionPane.ERROR_MESSAGE);
+            }
+        });
     }
 
     public static void main(String[] args) {

@@ -21,7 +21,7 @@ public class UserLinkedList {
     //Method to add the user
     public void addUser(int employeeId, String firstName, String lastName, String email, String pass) {
         UserNode newNode = new UserNode(employeeId, firstName, lastName, email, pass);
-
+        
         if (head == null) {
             head = newNode;
         } else {

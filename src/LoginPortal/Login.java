@@ -10,7 +10,7 @@ public class Login extends JFrame implements ActionListener {
     JLabel titleLabel, idLabel, passLabel;
     JTextField idField; // ID field
     JPasswordField passField; // Password field
-    JButton loginBtn, clearBtn; // Login and clear buttons
+    JButton loginBtn, signUpBtn; // Login and sign up buttons
     JPanel panel; // Panel
 
     // Constructor
@@ -44,13 +44,13 @@ public class Login extends JFrame implements ActionListener {
 
         // Buttons
         loginBtn = new JButton("Login");
-        clearBtn = new JButton("Signup");
+        signUpBtn = new JButton("Signup");
         loginBtn.addActionListener(this);
-        clearBtn.addActionListener(this);
+        signUpBtn.addActionListener(this);
         add(loginBtn);
-        add(clearBtn);
+        add(signUpBtn);
         loginBtn.setBounds(275, 310, 130, 35);
-        clearBtn.setBounds(130, 310, 130, 35);
+        signUpBtn.setBounds(130, 310, 130, 35);
         add(panel);
 
         //Frame Properties
@@ -70,8 +70,20 @@ public class Login extends JFrame implements ActionListener {
             if (e.getSource() == loginBtn) {
                 String s1 = idField.getText();
                 char[] p = passField.getPassword();
-                int employeeId = Integer.parseInt(s1);
                 String pass = new String(p);
+
+                //Condition to check if the fields are blank
+                if (s1.isBlank() || pass.isBlank()) {
+                    JOptionPane.showMessageDialog(null, "Invalid Username or Password!", "Error", JOptionPane.ERROR_MESSAGE);
+                    return;
+                }
+                
+                int employeeId = Integer.parseInt(s1);
+
+                //Condition to check if the fields are blank
+//                if (s1.isBlank(){
+//                    JOptionPane.showMessageDialog(null, "Enter your ID number ");
+//                }
 
                 try {
                     //Login logic here
@@ -83,14 +95,10 @@ public class Login extends JFrame implements ActionListener {
                     System.out.println(ex);
                 }
             } else {
-                  
-                  //DUMMY JUST TO TEST RELOGIN FUNCTION
-                  new SignUp();
-                  
-//                idField.setText("");
-//                passField.setText("");
-                  
-    
+
+                //DUMMY JUST TO TEST RELOGIN FUNCTION
+                new SignUp();
+
             }
         } catch (Exception ex) {
             System.out.println(ex);
