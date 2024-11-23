@@ -32,7 +32,7 @@ public class SignUp extends JFrame implements ActionListener{
     JPasswordField passwordField, confirmField;
     File file = new File("C:\\Files");
     int lines;
-    
+    String test;
     //Constructor
     SignUp(){
         
