@@ -98,10 +98,12 @@ public class Login extends JFrame implements ActionListener {
 
                 //DUMMY JUST TO TEST RELOGIN FUNCTION
                 new SignUp();
+                this.dispose();
 
             }
         } catch (Exception ex) {
             System.out.println(ex);
+            JOptionPane.showMessageDialog(null, "Invalid Username or Password!", "Error", JOptionPane.ERROR_MESSAGE);
         }
     }
 

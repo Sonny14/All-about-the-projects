@@ -143,7 +143,8 @@ public class SignUp extends JFrame {
                         //Sign-up logic here
                         list.addUser(employeeId, firstName, lastName, email, pass);
                         list.displayUsers();
-                        SignUp.this.dispose();
+                        new Login();
+                        this.dispose();
                         
                     } catch (Exception ex) {
                         System.out.println(ex);
